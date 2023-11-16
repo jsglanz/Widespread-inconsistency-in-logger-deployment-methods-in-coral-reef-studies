@@ -214,3 +214,290 @@ lrs_f2%>%
   geom_text(data=annotation, aes( x=x, y=9.55, label=label),                 
             color="black", 
             size=5 , fontface="bold" )
+
+
+## Number of studies mentioning shading/calibrating --------------
+
+#in data that was subset to only include studies once (lrs_u):
+
+#add column based on mention of shading
+lrs_u$grp1 = with(lrs_u, 
+                       ifelse(Shaded=="Yes",1,0))
+
+#add column based on mention of calibrating
+lrs_u$grp2 = with(lrs_u, 
+                  ifelse(Calibrated=="Yes",2,0))
+
+#add column that combines the previous two columns
+lrs_u$grp3 = lrs_u$grp1+lrs_u$grp2
+
+#add a factor column based on the combo column
+lrs_u$grp = with(lrs_u, 
+                 ifelse(grp3==3,"Both",
+                        ifelse(grp3==1,"Shaded",
+                               ifelse(grp3==2,"Calibrated",
+                               "Neither"))))
+
+#sum number of studies in each category of the combo column
+lrs_sc <- lrs_u %>%
+  drop_na(grp)%>%
+  group_by(grp) %>%
+  summarise(count=na.omit(sum(dummy)))
+
+#compute percentages in each category to label plot 
+sum(lrs_sc$count) #328
+
+lrs_sc$p<-(lrs_sc$count/328)*100
+
+#Plot the data
+lrs_sc%>%
+  mutate(grp = factor(grp, levels=c("Both","Shaded","Calibrated","Neither"))) %>%
+  ggplot(aes(x=grp, y=count)) +
+  theme_classic()+
+  xlab("")+
+  ylab("Number of Studies")+
+  ylim(0,337)+
+  scale_x_discrete(labels=c("Both"=paste0("Both","\n", "S+C"),"Shaded"=paste0("Shaded","\n", "S"),"Calibrated"=paste0("Calibrated","\n", "C"),"Neither"=paste0("Neither","\n", "S or C")))+
+  geom_rect( xmin=0.7,xmax=1.3,ymin=0,ymax=4, color="#60CEACFF", fill="#60CEACFF",size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=6,ymax=10, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=12,ymax=16, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=18,ymax=22, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=24,ymax=28, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=30,ymax=34, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=36,ymax=40, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=42,ymax=46, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=48,ymax=52, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=54,ymax=58, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=60,ymax=64, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=66,ymax=70, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=72,ymax=76, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=78,ymax=82, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=84,ymax=88, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=90,ymax=94, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=96,ymax=100, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=102,ymax=106, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=108,ymax=112, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=114,ymax=118, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=120,ymax=124, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=126,ymax=130, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=132,ymax=136, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=138,ymax=142, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=144,ymax=148, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=150,ymax=154, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=156,ymax=160, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=162,ymax=166, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=168,ymax=172, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=174,ymax=178, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=180,ymax=184, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=186,ymax=190, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=192,ymax=196, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=198,ymax=202, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=204,ymax=208, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=210,ymax=214, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=216,ymax=220, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=222,ymax=226, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=228,ymax=232, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=234,ymax=238, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=240,ymax=244, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=246,ymax=250, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=252,ymax=256, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=258,ymax=262, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=264,ymax=268, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=270,ymax=274, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=276,ymax=280, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=282,ymax=286, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=288,ymax=292, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=294,ymax=298, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=300,ymax=304, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=306,ymax=310, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=312,ymax=316, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=318,ymax=322, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=0.7,xmax=1.3,ymin=324,ymax=328, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  
+  
+  geom_text(aes( x=1, y=337, label="1.52%"), 
+            color="#60CEACFF", 
+            size=3 , fontface="bold" )+
+  geom_rect( xmin=1.7,xmax=2.3,ymin=0,ymax=4, color="#A4E0BBFF" , fill= "#A4E0BBFF",size=0.25 ) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=6,ymax=10, color="#A4E0BBFF" ,fill="#A4E0BBFF",size=0.25  ) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=12,ymax=16, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=18,ymax=22, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=24,ymax=28, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=30,ymax=34, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=36,ymax=40, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=42,ymax=46, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=48,ymax=52, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=54,ymax=58, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=60,ymax=64, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=66,ymax=70, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=72,ymax=76, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=78,ymax=82, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=84,ymax=88, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=90,ymax=94, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=96,ymax=100, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=102,ymax=106, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=108,ymax=112, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=114,ymax=118, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=120,ymax=124, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=126,ymax=130, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=132,ymax=136, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=138,ymax=142, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=144,ymax=148, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=150,ymax=154, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=156,ymax=160, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=162,ymax=166, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=168,ymax=172, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=174,ymax=178, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=180,ymax=184, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=186,ymax=190, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=192,ymax=196, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=198,ymax=202, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=204,ymax=208, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=210,ymax=214, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=216,ymax=220, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=222,ymax=226, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=228,ymax=232, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=234,ymax=238, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=240,ymax=244, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=246,ymax=250, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=252,ymax=256, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=258,ymax=262, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=264,ymax=268, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=270,ymax=274, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=276,ymax=280, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=282,ymax=286, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=288,ymax=292, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=294,ymax=298, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=300,ymax=304, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=306,ymax=310, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=312,ymax=316, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=318,ymax=322, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=1.7,xmax=2.3,ymin=324,ymax=328, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  
+  
+  geom_text(aes( x=2, y=337, label="3.05%"), 
+            color="#A4E0BBFF", 
+            size=3 , fontface="bold" )+
+  geom_rect( xmin=2.7,xmax=3.3,ymin=0,ymax=4, color="#3497A9FF", fill=  "#3497A9FF",size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=6,ymax=10, color="#3497A9FF", fill=  "#3497A9FF",size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=12,ymax=16, color="#3497A9FF",fill=  "#3497A9FF",size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=18,ymax=22, color="#3497A9FF",fill=  "#3497A9FF",size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=24,ymax=28, color="#3497A9FF",fill=  "#3497A9FF",size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=30,ymax=34, color="#3497A9FF",fill=  "#3497A9FF",size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=36,ymax=40, color="#3497A9FF",fill=  "#3497A9FF",size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=42,ymax=46, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=48,ymax=52, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=54,ymax=58, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=60,ymax=64, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=66,ymax=70, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=72,ymax=76, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=78,ymax=82, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=84,ymax=88, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=90,ymax=94, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=96,ymax=100, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=102,ymax=106, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=108,ymax=112, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=114,ymax=118, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=120,ymax=124, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=126,ymax=130, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=132,ymax=136, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=138,ymax=142, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=144,ymax=148, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=150,ymax=154, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=156,ymax=160, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=162,ymax=166, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=168,ymax=172, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=174,ymax=178, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=180,ymax=184, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=186,ymax=190, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=192,ymax=196, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=198,ymax=202, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=204,ymax=208, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=210,ymax=214, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=216,ymax=220, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=222,ymax=226, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=228,ymax=232, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=234,ymax=238, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=240,ymax=244, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=246,ymax=250, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=252,ymax=256, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=258,ymax=262, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=264,ymax=268, color="white",fill="darkgrey", alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=270,ymax=274, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=276,ymax=280, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=282,ymax=286, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=288,ymax=292, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=294,ymax=298, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=300,ymax=304, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=306,ymax=310, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=312,ymax=316, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=318,ymax=322, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=2.7,xmax=3.3,ymin=324,ymax=328, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  
+  geom_text(aes( x=3, y=337, label="11.9%"), 
+            color="#3497A9FF", 
+            size=3 , fontface="bold" )+
+  
+  geom_rect( xmin=3.7,xmax=4.3,ymin=0,ymax=4, color="#40498EFF", fill=  "#40498EFF", alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=6,ymax=10, color="#40498EFF", fill=  "#40498EFF",alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=12,ymax=16, color="#40498EFF",fill=  "#40498EFF", alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=18,ymax=22, color="#40498EFF",fill=  "#40498EFF", alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=24,ymax=28, color="#40498EFF",fill=  "#40498EFF", alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=30,ymax=34, color="#40498EFF",fill=  "#40498EFF", alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=36,ymax=40, color="#40498EFF",fill=  "#40498EFF", alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=42,ymax=46, color="#40498EFF",fill=  "#40498EFF", alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=48,ymax=52, color="#40498EFF",fill=  "#40498EFF",alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=54,ymax=58, color="#40498EFF",fill=  "#40498EFF", alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=60,ymax=64, color="#40498EFF",fill=  "#40498EFF", alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=66,ymax=70, color="#40498EFF", fill=  "#40498EFF",alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=72,ymax=76, color="#40498EFF",fill=  "#40498EFF", alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=78,ymax=82, color="#40498EFF",fill=  "#40498EFF", alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=84,ymax=88, color="#40498EFF",fill=  "#40498EFF", alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=90,ymax=94, color="#40498EFF",fill=  "#40498EFF", alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=96,ymax=100, color="#40498EFF",fill=  "#40498EFF", alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=102,ymax=106, color="#40498EFF",fill=  "#40498EFF", alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=108,ymax=112, color="#40498EFF",fill=  "#40498EFF", alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=114,ymax=118, color="#40498EFF",fill=  "#40498EFF", alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=120,ymax=124, color="#40498EFF", fill=  "#40498EFF",alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=126,ymax=130, color="#40498EFF", fill=  "#40498EFF",alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=132,ymax=136, color="#40498EFF", fill=  "#40498EFF",alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=138,ymax=142, color="#40498EFF", fill=  "#40498EFF",alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=144,ymax=148, color="#40498EFF",fill=  "#40498EFF", alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=150,ymax=154, color="#40498EFF", fill=  "#40498EFF",alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=156,ymax=160, color="#40498EFF", fill=  "#40498EFF",alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=162,ymax=166, color="#40498EFF", fill=  "#40498EFF",alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=168,ymax=172, color="#40498EFF", fill=  "#40498EFF",alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=174,ymax=178, color="#40498EFF", fill=  "#40498EFF",alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=180,ymax=184, color="#40498EFF", fill=  "#40498EFF",alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=186,ymax=190, color="#40498EFF",fill=  "#40498EFF", alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=192,ymax=196, color="#40498EFF",fill=  "#40498EFF", alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=198,ymax=202, color="#40498EFF",fill=  "#40498EFF", alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=204,ymax=208, color="#40498EFF", fill=  "#40498EFF",alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=210,ymax=214, color="#40498EFF", fill=  "#40498EFF",alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=216,ymax=220, color="#40498EFF",fill=  "#40498EFF", alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=222,ymax=226, color="#40498EFF",fill=  "#40498EFF", alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=228,ymax=232, color="#40498EFF",fill=  "#40498EFF", alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=234,ymax=238, color="#40498EFF", fill=  "#40498EFF",alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=240,ymax=244, color="#40498EFF", fill=  "#40498EFF",alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=246,ymax=250, color="#40498EFF", fill=  "#40498EFF",alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=252,ymax=256, color="#40498EFF", fill=  "#40498EFF",alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=258,ymax=262, color="#40498EFF",fill=  "#40498EFF", alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=264,ymax=268, color="#40498EFF",fill=  "#40498EFF", alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=270,ymax=274, color="#40498EFF",fill=  "#40498EFF",size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=276,ymax=280, color="white", fill="darkgrey",alpha=0.8,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=282,ymax=286, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=288,ymax=292, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=294,ymax=298, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=300,ymax=304, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=306,ymax=310, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=312,ymax=316, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=318,ymax=322, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_rect( xmin=3.7,xmax=4.3,ymin=324,ymax=328, color="white", fill="darkgrey",alpha=0.5,size=0.25) +
+  geom_text(aes( x=4, y=337, label="83.5%"), 
+            color="#40498EFF", 
+            size=3 , fontface="bold" )+
+  theme(text=element_text(size=8))
+
+
+
+
