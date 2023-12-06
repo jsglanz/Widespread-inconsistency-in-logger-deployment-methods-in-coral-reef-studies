@@ -87,8 +87,8 @@ slopes.ordered$estimate<-format(slopes.ordered$estimate, scientific = FALSE)
 #set order of logger models
 slopes.ordered$Model<-ordered(slopes.ordered$Model,levels=c("Odyssey","Nat", "Minidot","Tidbit","Pro","PendantLT",
                                "Pendant","MXLT"),
-        labels= c("Odyssey","Star-Oddi", "PME-MiniDot","Onset-Tidbit",
-                  "Onset-Pro","Onset-PendantLT","Onset-Pendant","Onset-PendantMX"))
+        labels= c("Odyssey","Star-Oddi", "MiniDot","Tidbit",
+                  "Pro","Pendant LT","Pendant","Pendant MX LT"))
 
 #calculate PAR at which diff=0.5 -- all y-intercepts at 0 so the equation is
 # 0.5-intercept (estimate.y)/slope (estimate.x)
@@ -98,8 +98,8 @@ slopes.ordered<-slopes.ordered %>% mutate(Threshold.plot=ifelse(Threshold<1000,T
 #order the models based on slopes from least to greatest
 trimmed$Model<-ordered(trimmed$Model,levels=c("Odyssey","Nat", "Minidot","Tidbit","Pro","PendantLT",
                                               "Pendant","MXLT"),
-                       labels= c("Odyssey","Star-Oddi", "PME-MiniDot","Onset-Tidbit",
-                                 "Onset-Pro","Onset-PendantLT","Onset-Pendant","Onset-PendantMX"))
+                       labels= c("Odyssey","Star-Oddi", "MiniDot","Tidbit",
+                                 "Pro","Pendant LT","Pendant","Pendant MX LT"))
 
 
 #Plot and add cut off line for irradiance value at which avg offset >0.5C for shallow loggers
@@ -122,7 +122,7 @@ f3<-ggplot(trimmed,aes(irradiance_avg,mean_diff,group=Shade,fill=Shade,col=Shade
 
 #save plot
 ggsave(
-  "fig3.pdf",
+  "solarwarming2.0.pdf",
   plot = f3,
   device = NULL,
   path = NULL,
