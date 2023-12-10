@@ -1,5 +1,5 @@
 ##############################################################################################
-# This script was used to analyze different shading methods.
+# This script was used to analyze the offset temp when loggers are not shaded vs when they are placed in pvc and different shading methods.
 #
 #Created by Jess Glanz
 #Created on 06 Dec 2023
@@ -13,6 +13,7 @@ rm(list=ls())
 library(ggplot2)
 library(dplyr)
 library(timetk)
+library(lubridate)
 
 
 ###Load data
@@ -23,6 +24,67 @@ shade_data$t<-mdy_hm(shade_data$time)
 
 #rename "control" as "unshaded" for clarity
 shade_data$treat[shade_data$treat=="control"]<-"Unshaded"
+
+
+####Shading Matters
+
+shade_data$depth<-as.factor(shade_data$depth)#convert depth into a factor
+
+sd15pc<-shade_data %>% filter(depth %in% c("1.2","5.2")) %>% filter(treat %in% c("pvc","control"))%>%select(2:3,5:7,10) #subset for data from best shaded treatment (pvc) and unshaded treatment (control) and from 1.2m and 5.2m
+
+sd15pc_w<-spread(sd15pc,treat,temp) %>% select(4,1,3,5:6) #convert data to wide to correct unshaded temps to shaded temps
+
+c<-sd15pc_w%>%select(1:4)%>%na.omit() #select only data pertaining to control and remove rows with NA
+s<-sd15pc_w%>%select(1:3,5)%>%na.omit() #select only data pertaining to pvc and remove rows with NA
+
+
+cs<-left_join(c,s) #join control and pvc data by time, depth and light
+
+cs$offset<-cs$control-cs$pvc #calculate offset of unshaded temp from shaded temp
+
+d1<-cs%>%filter(t %>% between_time("2023-06-07 06:00:00", "2023-06-07 19:00:00"))#subset for daytime on day 1
+d2<-cs%>%filter(t %>% between_time("2023-06-08 06:00:00", "2023-06-08 19:00:00"))#subset for daytime on day 2
+
+cs_s<-bind_rows(d1,d2) #merge daytime from both day 1 and day 2
+
+cs_s$depth <- ordered(cs_s$depth, levels = c("5.2","1.2")) #order depth factor
+
+###Plot the data
+usoffset<-cs_s%>%
+  ggplot()+
+  geom_density(mapping = aes(x=offset, after_stat(scaled), fill = depth ), size = 0.25, color="white",alpha = 0.85,adjust=1.5)+
+  geom_vline(xintercept=0,linetype="dashed",size=0.25)+
+  theme_classic()+
+  scale_fill_manual(name="Depth (m)",values =c("5.2" = "#3D5296FF", "1.2" =  "#70D4ADFF"),breaks=c("1.2","5.2"),labels=c("5.2"="5","1.2"="1"))  +
+  xlim(-1,2.5)+
+  ylab("Proportion of Measurements")+
+  xlab("Deviation from Shaded Temperature (°C)")+
+  theme(
+    legend.position = c(0.05, 1),
+    legend.justification = c("left", "top"),
+    legend.box.just = "right",
+    legend.margin = margin(2, 2, 2, 2),
+    legend.text      = element_text(size = 8),
+    legend.title     = element_text(size = 8, face = "bold"),
+    legend.key.size = unit(0.2, 'cm'),
+    text=element_text(size=8)
+  )
+
+
+###Save plot
+ggsave(
+  "UnshadedOffset.pdf",
+  plot = usoffset,
+  device = NULL,
+  path = NULL,
+  scale = 1,
+  width = 3,
+  height = 3,
+  units = "in",
+  dpi = 600) 
+
+
+####How you shade matters
 
 ##Subset data by depth
 shallow<-shade_data%>%filter(depth_type=="shallow")
