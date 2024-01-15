@@ -71,10 +71,10 @@ lrs_b$ymin = c(0, head(lrs_b$ymax, n=-1))+0.01
 
 
 #plot brand donut
-lrs_b%>%
+bd<-lrs_b%>%
   ggplot(aes(fill=brand,ymax=ymax, ymin=ymin,  xmax=4, xmin=3))+
   geom_rect()+
-  scale_fill_manual(name="Logger Brands",labels=c("aOnset"="Onset","bSea-Bird"="SeaBird","cRBR"="RBR","dReefNet"="ReefNet","eOther"="Other","fNot Mentioned"="Not mentioned"),values=c("#3482A4FF","#35A0ABFF", "#46BEADFF","#7ED7AFFF","#414388FF","#3A2C59FF"))+
+  scale_fill_manual(name="Logger Brands",labels=c("aOnset"="Onset®","bSea-Bird"="Sea-Bird®","cRBR"="RBR®","dReefNet"="ReefNet®","eOther"="Other","fNot Mentioned"="Not mentioned"),values=c("#3482A4FF","#35A0ABFF", "#46BEADFF","#7ED7AFFF","#414388FF","#3A2C59FF"))+
   scale_color_manual(values=c("#3482A4FF","#35A0ABFF", "#46BEADFF","#7ED7AFFF","#414388FF","#3A2C59FF"))+
   ylim(0,1)+
   xlim(c(1, 4)) +
@@ -92,6 +92,18 @@ lrs_b%>%
     legend.key.size = unit(0.4, 'cm'),
     text=element_text(size=8)
   )
+
+##save plot
+ggsave(
+  "BrandDonut.pdf",
+  plot = bd,
+  device = NULL,
+  path = NULL,
+  scale = 1,
+  width = 3,
+  height = 3,
+  units = "in",
+  dpi = 600) 
 
 ## Break down proportion of studies using most common Onset models --------------
 
@@ -152,19 +164,46 @@ on_m<-bind_rows(on_m,nO)
 #compute a good label 
 on_m$p<-round(on_m$p, digits = 2)#round percentage to 2 digits
 
-on_m$label <- paste0(on_m$mod,"\n",on_m$p,"%") #"\n" put space between the plastic type and its count
+on_m$label <- paste0(on_m$p,"%") #"\n" put space between the plastic type and its count
+
 
 #plot onset donut
-on_m%>%
+odpo<-on_m%>%
   ggplot(aes(fill=mod,alpha=mod,ymax=ymax, ymin=ymin,  xmax=4, xmin=3))+
   geom_rect()+
   geom_text( x=3.5, aes(y=labelPosition, label=label),color="white",size=2.6) +
-  scale_fill_manual(name="Onset Models",values = c("nO"="white","aOther"="#A4E0BBFF", "ePro"="#0B0405FF","cPend-LT"= "#3482A4FF","dPend"= "#3F3770FF", "bTidbit"= "#3AAEADFF"), breaks = c("aOther","bTidbit","cPend-LT","dPend","ePro"))+
+  scale_fill_manual(name='Onset® Models',values = c("nO"="white","aOther"="#A4E0BBFF", "ePro"="#0B0405FF","cPend-LT"= "#3482A4FF","dPend"= "#3F3770FF", "bTidbit"= "#3AAEADFF"), breaks = c("aOther","bTidbit","cPend-LT","dPend","ePro"),labels=c("aOther"="Other","ePro"="Pro","bTidbit"="Tidbit","cPend-LT"="Pendant LT","dPend"="Pendant"))+
   scale_alpha_manual(values = c("nO"=0,"aOther"=1, "ePro"=1,"cPend-LT"= 1,"dPend"= 1, "bTidbit"= 1), breaks = c("aOther","bTidbit","cPend-LT","dPend","ePro"))+
   xlim(c(1, 4)) +
   coord_polar(theta="y", direction = 1) +
   theme_void() +
-  guides(fill = "none",color="none",alpha="none")
+  guides(alpha="none")+
+  #theme(legend.position="none")
+  theme(
+    legend.position = c(.5, .5),
+    legend.justification = c("center", "center"),
+    legend.box.just = "right",
+    legend.margin = margin(2, 2, 2, 2),
+    legend.text      = element_text(size = 8),
+    legend.title     = element_text(size = 8, face = "bold"),
+    legend.key.size = unit(0.4, 'cm'),
+    text=element_text(size=8)
+  )
+
+leg<-get_legend(odpo)
+print(leg)
+  
+  ##save plot
+  ggsave(
+    "OnsetDonutlegend.pdf",
+    plot = leg,
+    device = NULL,
+    path = NULL,
+    scale = 1,
+    width = 3,
+    height = 3,
+    units = "in",
+    dpi = 600) 
 
 
 ## Histogram of sampling frequencies --------------
