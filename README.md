@@ -1,4 +1,4 @@
-# Taking the temperature of coral reefs: Comparing loggers and methods to inform best practices for monitoring efforts 
+# Widespread inconsistency in logger deployment methods in coral reef studies may bias perceptions of thermal regimes
 
 This repository contains data and code for the above manuscript.
 
